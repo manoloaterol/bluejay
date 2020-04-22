@@ -1041,6 +1041,10 @@ public class Bluejay: NSObject { //swiftlint:disable:this type_body_length
         return data
     }
 
+    public static func disableLogs() {
+        logger.outputLevel = .none
+    }
+
     private func endStartupBackgroundTask() {
         if startupBackgroundTask != UIBackgroundTaskIdentifier.invalid {
             debugLog("Ending startup background task.")
