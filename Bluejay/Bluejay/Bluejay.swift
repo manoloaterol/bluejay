@@ -175,6 +175,10 @@ public class Bluejay: NSObject { //swiftlint:disable:this type_body_length
         let bundleName = Bundle.main.infoDictionary?[kCFBundleNameKey as String] ?? ""
         logger.debug("[\(bundleName)] > \(string)", userInfo: [tags: bundleName])
     }
+    
+    public func disableLogs() {
+        logger.outputLevel = .none
+    }
 
     /**
      * Get the current content of the log file.
@@ -1041,9 +1045,6 @@ public class Bluejay: NSObject { //swiftlint:disable:this type_body_length
         return data
     }
 
-    public static func disableLogs() {
-        logger.outputLevel = .none
-    }
 
     private func endStartupBackgroundTask() {
         if startupBackgroundTask != UIBackgroundTaskIdentifier.invalid {
