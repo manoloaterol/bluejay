@@ -43,6 +43,9 @@ public class Bluejay: NSObject { //swiftlint:disable:this type_body_length
     /// Reference to a peripheral that is connected. If this is nil, then the peripheral should either be disconnected or still connecting. This is used to help determine the state of the peripheral's connection.
     private var connectedPeripheral: Peripheral?
 
+    /// MTU
+    public var actualDeviceMTU: Int = 0
+
     /// The previous connection timeout used.
     private var previousConnectionTimeout: Timeout?
 
@@ -1312,6 +1315,7 @@ extension Bluejay: CBCentralManagerDelegate {
 
         connectedPeripheral = connectingPeripheral
         connectingPeripheral = nil
+        actualDeviceMTU = peripheral.maximumWriteValueLength(for: .withoutResponse)
 
         precondition(connectedPeripheral != nil, "Connected peripheral is assigned a nil value despite Bluejay has successfully finished a connection.")
 
