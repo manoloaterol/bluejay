@@ -1311,21 +1311,23 @@ extension Bluejay: CBCentralManagerDelegate {
     public func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         debugLog("Central manager did connect to: \(peripheral.name ?? peripheral.identifier.uuidString)")
 
-        connectingCallback = nil
-
-        connectedPeripheral = connectingPeripheral
-        connectingPeripheral = nil
-        actualDeviceMTU = peripheral.maximumWriteValueLength(for: .withoutResponse)
-
-        precondition(connectedPeripheral != nil, "Connected peripheral is assigned a nil value despite Bluejay has successfully finished a connection.")
-
-        shouldAutoReconnect = true
-        debugLog("Should auto-reconnect: \(shouldAutoReconnect)")
-
-        queue.process(event: .didConnectPeripheral(connectedPeripheral!), error: nil)
-
-        for observer in connectionObservers {
-            observer.weakReference?.connected(to: connectedPeripheral!.identifier)
+        if connectingPeripheral != nil {
+            connectingCallback = nil
+            
+            connectedPeripheral = connectingPeripheral
+            connectingPeripheral = nil
+            actualDeviceMTU = peripheral.maximumWriteValueLength(for: .withoutResponse)
+            
+            precondition(connectedPeripheral != nil, "Connected peripheral is assigned a nil value despite Bluejay has successfully finished a connection.")
+            
+            shouldAutoReconnect = true
+            debugLog("Should auto-reconnect: \(shouldAutoReconnect)")
+            
+            queue.process(event: .didConnectPeripheral(connectedPeripheral!), error: nil)
+            
+            for observer in connectionObservers {
+                observer.weakReference?.connected(to: connectedPeripheral!.identifier)
+            }
         }
     }
 
